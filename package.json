@@ -1,0 +1,86 @@
+{
+  "name": "checker-as-is",
+  "version": "0.6.1",
+  "description": "Check your types at runtime with ESNext syntax by meta programing in node.js and browser and even more.",
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=14.18.3"
+  },
+  "directories": {
+    "lib": "lib",
+    "tests": "tests"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha tests/as-is.class.test.js"
+  },
+  "keywords": [
+    "javascript",
+    "typechecker",
+    "check-type",
+    "javascript-type",
+    "primitive-types",
+    "class-check",
+    "type-checking",
+    "type-checker",
+    "type-check",
+    "define-type",
+    "get-type",
+    "what-type",
+    "is-string",
+    "is-number",
+    "is-boolean",
+    "is-symbol",
+    "is-function",
+    "is-BigInt",
+    "is-undefined",
+    "is-null",
+    "is-array",
+    "is-array",
+    "is-date",
+    "is-object",
+    "is-set",
+    "is-map",
+    "is-WeakSet",
+    "is-WeakMap",
+    "is-WeakRef",
+    "is-RegExp",
+    "is-Error",
+    "is-RangeError",
+    "is-ReferenceError",
+    "is-SyntaxError",
+    "is-TypeError",
+    "is-Buffer",
+    "is-Promise",
+    "is-JSON",
+    "is-JSON5",
+    "is-class",
+    "is-empty",
+    "is-notEmpty"
+  ],
+  "author": "UncleVova aka kotowolod@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "4.3.4",
+    "chai-bytes": "0.1.2",
+    "mocha": "9.1.3"
+  },
+  "files": [
+    "*.js",
+    "browserTest.html",
+    "/lib/*.js",
+    "/vendor/*.js",
+    "/dist/*.js",
+    "/lib/types/*.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "homepage": "https://github.com/KotoWolod/checker-as-is",
+  "bugs": {
+    "url": "https://github.com/KotoWolod/checker-as-is/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KotoWolod/checker-as-is"
+  }
+}
