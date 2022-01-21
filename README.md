@@ -1,4 +1,4 @@
-# checker-as-is v0.6.1
+# checker-as-is v0.6.13
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser and even more.
 follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
@@ -59,7 +59,7 @@ npm i checker-as-is -S
 ```
 **Browsers**
 ```html
-<script src="https://unpkg.com/checker-as-is@^0.6.1/dist/as-is.browser.min.min.js"></script>
+<script src="https://unpkg.com/checker-as-is@^0.6.1/src/as-is.browser.min.js"></script>
 ```
 # API
 ## Basics
