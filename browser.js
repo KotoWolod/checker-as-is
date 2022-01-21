@@ -1,4 +1,5 @@
-import Checker from './index.js';
+import { Checker, BaseInterface } from './src/as-is.browser.min.js';
+import MyInterface from "./tests/MyInterface.interface.js";
 const tc = new Checker();
 const { multi, Interface, Strict, type, as, is } = tc;
 
@@ -144,6 +145,12 @@ function exampleSecond(params) {
 
 example({ name: 'text', age: 12, pages:['page'] });
 exampleSecond({ title: 'Book title', pages: 777});
+
+const intefaces = Interface({});
+
+const { IMyInterface } = Interface({ IMyInterface: new MyInterface });
+as.IMyInterface = { name: 'Tomas', age: 12, surName: 'Andersen' };
+
 window.document.body.innerHTML=`
 <div style="text-align: left; padding-left: 20%"> <h2>Syntax</h2>
 is.string(string_) && as.string(string_);<br>
@@ -252,6 +259,11 @@ function exampleSecond(params) {<br>
 <br>
 example({ name: 'text', age: 12, pages:['page'] });<br>
 exampleSecond({ title: 'Book title', pages: 777});<br>
+<br>
+const intefaces = Interface({});<br>
+<br>
+const { IMyInterface } = Interface({ IMyInterface: new MyInterface });<br>
+as.IMyInterface = { name: 'Tomas', age: 12, surName: 'Andersen' };<br>
 <h3>works!</h3> </div>
 <h2 style="text-align: center"> All tests completed</h2>
 `;

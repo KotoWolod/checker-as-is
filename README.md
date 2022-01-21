@@ -1,7 +1,7 @@
-# checker-as-is v0.7.0
+# checker-as-is v0.7.1
 
-Check your types at runtime with ESNext syntax by meta programing in node.js and browser and even more.
-follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
+Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object and more.
+Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
  
 ### Summary of Features 
 **Types list with alias name:** 
@@ -45,6 +45,26 @@ follow me on twitter for further updates [twitter](https://twitter.com/Volodymyr
 **Class checking:** 
 - [className]
 
+**Interface**
+```js
+const { IUser } = Interface({
+            IUser: {
+                name: as.string,
+                age: as.number,
+                birthDate: as.date
+            }
+});
+IUser.pages = as.strings;
+delete IUser.birthDate;
+
+function example(params, Interface = (as.IUser = params)) {
+            console.log(params);
+            return 'returned string';
+        }
+
+as.StringNumber(example({ name: 'text', age: 12, pages:['page'] }));
+```
+
 **Integrations:**
 
     import {default as email} from 'validator/lib/isEmail';
@@ -59,9 +79,10 @@ npm i checker-as-is -S
 ```
 **Browsers**
 ```html
-<script src="https://unpkg.com/checker-as-is@^0.6.1/src/as-is.browser.min.js"></script>
+<script src="https://unpkg.com/checker-as-is@^0.7.1/src/as-is.browser.min.js"></script>
 ```
 # API
+**Checker-as-is** is a stateful module. This means that the instance holds the state of the strict object, interfaces and more. Please keep this in mind.
 ## Basics
 ```js
 is['js type here']('argument here') // argument | false
@@ -69,7 +90,7 @@ as['js type here']('argument here') // argument | TypeError
 ```
 An example
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 
@@ -83,7 +104,7 @@ as.string('example string'); // TypeError: String is not a(an) number
 ```
 ## Basic Usage
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
@@ -98,7 +119,7 @@ example(text, 2, true)
 ```
 or next syntax
 ```js 
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
@@ -111,7 +132,7 @@ example(text, 2, true)
 ```
 or more extraordinary syntax
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3,
@@ -124,7 +145,7 @@ example(text, 2, true)
 ```
 For more code readability:
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 is?.string('example string');
@@ -132,7 +153,7 @@ as?.string('example string');
 ```
 ### You can even check the class type
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const instance = new Checker();
 
 is.Checker(Checker); // class Checker
@@ -147,10 +168,10 @@ as.Checker(instance);// class instance
 ## Checking one repeated type
 In object, array, set and map. All types ending in 's' will be checked.
 ```js
-        is.strings(exampleObject) && as.strings(exampleObject);
-        is.Numbers(exampleArray) && as.Numbers(exampleArray);
-        is.Errors(exampleSet) && as.Errors(exampleSet);
-        is.BigInts(exampleMap) && as.BigInts(exampleMap); 
+is.strings(exampleObject) && as.strings(exampleObject);
+is.Numbers(exampleArray) && as.Numbers(exampleArray);
+is.Errors(exampleSet) && as.Errors(exampleSet);
+is.BigInts(exampleMap) && as.BigInts(exampleMap); 
 ```
 ## Strict typing
 ### Basics
@@ -166,7 +187,7 @@ strict.name = 'Stephen Hawking';
 ```
 ### Basic usage
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 //-- Do it once!
 const strict = new Strict(
@@ -227,7 +248,7 @@ console.log(strict.values());
 ```
 Any tricks will not help you get the second strict object. Maybe I'll find a solution for this because I think it's a bug, not a feature :)
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 type.string`example`;
@@ -272,11 +293,106 @@ const multiType = 'Number|String|Boolean';
 as[multiType]({});
 // TypeError: Object is not a(an) Number|String|Boolean
 ```
+## Interfaces
+## Basic
+First you need create an interface, which will be stored in instance of checker in private area **#interfaces**.
+```js
+const checker = new Checker();
+const { multi, Interface, Strict, type, as, is } = checker;
 
+const { [InterfaceName] } = Interface({
+    [InterfaceName]: {
+        [propertyName]: ['as[js type here]']
+    }
+});
+// as result => checker.#interfaces[InterfaceName]
+```
+Working example
+```js
+const {  Interface, as } = new Checker();
+
+const { IUser } = Interface({
+    IUser: {
+        name: as.string
+    }
+});
+```
+When the interface is ready, you can change it.
+```js
+IUser.pages = as.strings;
+IUser.birthDate = as.number;
+delete IUser.birthDate;
+```
+The method Interface receives an object of objects, where the properties are a reference to Checker-as-is type checking methods.
+You can use **BaseInterface** to create an interface object after instantiation. This gives you the ability to work with interfaces like classes.
+```js
+// MyInterface.interface.js
+
+export default class MyInterface extends BaseInterface {
+    constructor() {
+        super(MyInterface);
+        this.age = ()=> as.number;
+    }
+
+    name() {
+        return as.string
+    }
+
+    static surName() {
+        return as.string
+    }
+}
+```
+After that
+```js
+import MyInterface from './MyInterface.interface.js';
+
+const { IMyInterface } = Interface({ IMyInterface: new MyInterface });
+as.IMyInterface = { name: 'Tomas', age: 33, surName: 'Andersen' };
+```
+### Basic usage
+```js
+const { IUser, IBook } = Interface({
+    IUser: {
+        name: as.string,
+        age: as.number,
+        birthDate: as.date
+    },
+    IBook: {
+        title: as.string,
+        pages: as.number
+    }
+});
+
+IUser.pages = as.strings;
+delete IUser.birthDate;
+
+as.IUser = { name: 'text', age: 12, pages:['page'] };
+
+function example(params, Interface = (as.IUser = params)) {
+    return 'returned string';
+}
+
+function exampleSecond(params) {
+    const { title, pages } = as.IBook = params;
+    return params
+}
+
+
+// to check returned interface use "set"
+as.IBook = example({ name: 'text', age: 12, pages:['page'] });
+// to check returned value use "call"
+as.string(exampleSecond({ title: 'Book title', pages: 777}));
+```
+You can to get all interfaces from Checker instance like this:
+```js
+const intefaces = Interface({});
+// => { IUser, IBook, IMyInterface }
+```
 ## Integration
 You can integrate any feature you want.
 ```js
-import Checker from 'checker-as-is';
+import { Checker, BaseInterface } from 'checker-as-is';
 import axios from "axios";
 
 const integrate = {

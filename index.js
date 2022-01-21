@@ -1,1 +1,1 @@
-export {default} from './lib/as-is.class.js';
+export * from './lib/as-is.class.js';

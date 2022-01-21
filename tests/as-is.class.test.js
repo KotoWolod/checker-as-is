@@ -1,5 +1,7 @@
 import { mocha, describe, it, expect, before } from './header.js';
-import Checker from '../index.js';
+import { Checker, BaseInterface } from '../index.js';
+import MyInterface from './MyInterface.interface.js';
+
 const tc = new Checker();
 const { multi, Interface, Strict, type, as, is }  = tc;
 
@@ -206,5 +208,10 @@ describe('strict-type-checker tests', function () {
 
         example({ name: 'text', age: 12, pages:['page'] });
         exampleSecond({ title: 'Book title', pages: 777});
+
+        const intefaces = Interface({});
+
+        const { IMyInterface } = Interface({ IMyInterface: new MyInterface });
+        as.IMyInterface = { name: 'Tomas', age: 12, surName: 'Andersen' };
     })
 });

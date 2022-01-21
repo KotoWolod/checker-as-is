@@ -1,7 +1,7 @@
 {
   "name": "checker-as-is",
-  "version": "0.7.0",
-  "description": "Check your types at runtime with ESNext syntax by meta programing in node.js and browser and even more.",
+  "version": "0.7.1",
+  "description": "Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object and more.",
   "main": "index.js",
   "type": "module",
   "engines": {
@@ -17,6 +17,8 @@
   "keywords": [
     "as-is",
     "checker-as-is",
+    "js-inteface",
+    "interface-check",
     "javascript",
     "ESNext",
     "typechecker",
@@ -91,6 +93,5 @@
     "type": "git",
     "url": "git+https://github.com/KotoWolod/checker-as-is"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
