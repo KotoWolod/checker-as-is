@@ -1,6 +1,6 @@
-import Checker from './dist/as-is.browser.min.js';
+import Checker from './index.js';
 const tc = new Checker();
-const { multi, Strict, type, as, is } = tc;
+const { multi, Interface, Strict, type, as, is } = tc;
 
 const string_ = '';
 const number_ = 2;
@@ -114,6 +114,36 @@ multi(['Number|String|Boolean'])(true);
 
 const multiType = 'Number|String|Boolean';
 as[multiType](1);
+const { IUser, IBook } = Interface({
+    IUser: {
+        name: as.string,
+        age: as.number,
+        birthDate: as.date
+    },
+    IBook: {
+        title: as.string,
+        pages: as.number
+    }
+});
+
+IUser.pages = as.strings;
+delete IUser.birthDate;
+
+as.IUser = { name: 'text', age: 12, pages:['page'] };
+
+function example(params, Interface = (as.IUser = params)) {
+    console.log(params);
+    return 'returned string';
+}
+
+function exampleSecond(params) {
+    const { title, pages } = as.IBook = params;
+    console.log(title, pages );
+    return params
+}
+
+example({ name: 'text', age: 12, pages:['page'] });
+exampleSecond({ title: 'Book title', pages: 777});
 window.document.body.innerHTML=`
 <div style="text-align: left; padding-left: 20%"> <h2>Syntax</h2>
 is.string(string_) && as.string(string_);<br>
@@ -192,6 +222,36 @@ multi(['Number|String|Boolean'])(true);<br>
 <br>
 const multiType = 'Number|String|Boolean';<br>
 as[multiType](1);<br>
+const { IUser, IBook } = Interface({<br>
+    IUser: {<br>
+        name: as.string,<br>
+        age: as.number,<br>
+        birthDate: as.date<br>
+    },<br>
+    IBook: {<br>
+        title: as.string,<br>
+        pages: as.number<br>
+    }<br>
+});<br>
+<br>
+IUser.pages = as.strings;<br>
+delete IUser.birthDate;<br>
+<br>
+as.IUser = { name: 'text', age: 12, pages:['page'] };<br>
+<br>
+function example(params, Interface = (as.IUser = params)) {<br>
+    console.log(params);<br>
+    return 'returned string';<br>
+}<br>
+<br>
+function exampleSecond(params) {<br>
+    const { title, pages } = as.IBook = params;<br>
+    console.log(title, pages );<br>
+    return params<br>
+}<br>
+<br>
+example({ name: 'text', age: 12, pages:['page'] });<br>
+exampleSecond({ title: 'Book title', pages: 777});<br>
 <h3>works!</h3> </div>
 <h2 style="text-align: center"> All tests completed</h2>
 `;

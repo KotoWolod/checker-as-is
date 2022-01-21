@@ -1,4 +1,4 @@
-# checker-as-is v0.6.13
+# checker-as-is v0.7.0
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser and even more.
 follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
@@ -26,7 +26,7 @@ follow me on twitter for further updates [twitter](https://twitter.com/Volodymyr
 - ReferenceError | referenceError
 - SyntaxError |syntaxError
 - TypeError | typeError
-
+- Any | any
 
 **Multi type checking:**
 - String | Number | Boolean | etc ... 

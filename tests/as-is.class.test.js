@@ -1,7 +1,7 @@
 import { mocha, describe, it, expect, before } from './header.js';
 import Checker from '../index.js';
 const tc = new Checker();
-const { multi, Strict, type, as, is } = tc;
+const { multi, Interface, Strict, type, as, is }  = tc;
 
 const string_ = '';
 const number_ = 2;
@@ -114,6 +114,10 @@ describe('strict-type-checker tests', function () {
         expect(is.Checker(Checker)).to.be.equal(Checker);
     });
 
+    it('any positive tests', ()=> {
+        typeof_.concat(special_).forEach((value)=> expect(is.any(value)).to.be.equal(value));
+    });
+
     it('validator positive tests', () => {
         is.empty(string_) && as.empty(string_);
         is.empty(array_) && as.empty(array_);
@@ -169,5 +173,38 @@ describe('strict-type-checker tests', function () {
         expect(strict.values()).to.deep.equal({ age: 12, name: "Mike", pages: [ '']});
         type.string`example`;
         strict.example = '2';
+    })
+
+    it('interfaces positive testing', ()=> {
+        const { IUser, IBook } = Interface({
+            IUser: {
+                name: as.string,
+                age: as.number,
+                birthDate: as.date
+            },
+            IBook: {
+                title: as.string,
+                pages: as.number
+            }
+        });
+
+        IUser.pages = as.strings;
+        delete IUser.birthDate;
+
+        as.IUser = { name: 'text', age: 12, pages:['page'] };
+
+        function example(params, Interface = (as.IUser = params)) {
+            console.log(params);
+            return 'returned string';
+        }
+
+        function exampleSecond(params) {
+            const { title, pages } = as.IBook = params;
+            console.log(title, pages );
+            return params
+        }
+
+        example({ name: 'text', age: 12, pages:['page'] });
+        exampleSecond({ title: 'Book title', pages: 777});
     })
 });

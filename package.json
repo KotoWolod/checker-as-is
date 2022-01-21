@@ -1,6 +1,6 @@
 {
   "name": "checker-as-is",
-  "version": "0.6.13",
+  "version": "0.7.0",
   "description": "Check your types at runtime with ESNext syntax by meta programing in node.js and browser and even more.",
   "main": "index.js",
   "type": "module",
@@ -15,8 +15,15 @@
     "test": "./node_modules/.bin/mocha tests/as-is.class.test.js"
   },
   "keywords": [
+    "as-is",
+    "checker-as-is",
     "javascript",
+    "ESNext",
     "typechecker",
+    "strict-type",
+    "multi-type",
+    "repeated-type-check",
+    "validator-integration",
     "check-type",
     "javascript-type",
     "primitive-types",
@@ -85,6 +92,5 @@
     "url": "git+https://github.com/KotoWolod/checker-as-is"
   },
   "dependencies": {
-    "checker-as-is": "^0.6.11"
   }
 }
