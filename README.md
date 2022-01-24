@@ -1,4 +1,4 @@
-# checker-as-is v0.7.1
+# checker-as-is v0.7.2
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
