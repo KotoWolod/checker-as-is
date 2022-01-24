@@ -1,5 +1,9 @@
 import { mocha, describe, it, expect, before } from './header.js';
 import { Checker, BaseInterface } from '../index.js';
+import primitiveTypes from '../lib/types/primitiveTypes.js';
+import structuralTypes from '../lib/types/structuralTypes.js';
+import otherTypes from '../lib/types/otherTypes.js';
+
 import MyInterface from './MyInterface.interface.js';
 
 const tc = new Checker();
@@ -40,11 +44,14 @@ const exampleSet = new Set(exampleArray);
 const exampleMap = new Map();
 Object.keys(exampleObject).forEach((item)=> exampleMap.set(item, exampleObject[item]));
 
-const typeof_ = [string_, number_, boolean_, symbol_, function_, bigInt_];
-const special_ = [ array_, date_, object_, set_, map_, weakSet_, weakMap_, weakRef_,
+const primitive_ = [string_, number_, boolean_, symbol_, function_, bigInt_];
+const structural_ = [ array_, date_, object_, set_, map_, weakSet_, weakMap_, weakRef_,
     regExp_, buffer_, promise_, json_, json5_, error_, rangeError_, referenceError_, syntaxError_, typeError_,
     checker_];
-const numerous_ = typeof_.concat(special_.slice(-1));
+const numerousValues_ = primitive_.concat(structural_.slice(-1));
+const numerousTypes_ = primitiveTypes.concat(structuralTypes);
+const withLengthEmpty = [string_, array_, object_, set_, map_];
+const withLengthNotEmpty = ['string_', exampleArray, exampleObject, exampleSet, exampleMap];
 
 describe('strict-type-checker tests', function () {
     this.timeout(0);
@@ -69,7 +76,14 @@ describe('strict-type-checker tests', function () {
         expect(is.BigInt(bigInt_)).to.be.equal(bigInt_);
     });
 
-    it('special positive tests', () => {
+    it('primitive negative tests', ()=> {
+        primitiveTypes.forEach((type)=> primitive_.forEach((value)=> {
+                function throwFn() { try { as[type](value) } catch (e) { throw e } }
+                type.toLowerCase()!== typeof value && expect(throwFn).to.throw();
+        }));
+    });
+
+    it('structural positive tests', () => {
         is.undefined(undefined_) && as.undefined(undefined_);
         is.null(null_) && as.null(null_);
         is.array(undefined_) && as.array(undefined_);
@@ -116,8 +130,16 @@ describe('strict-type-checker tests', function () {
         expect(is.Checker(Checker)).to.be.equal(Checker);
     });
 
+    it('structural negative tests', ()=> {
+        structuralTypes.forEach((type)=> structural_.forEach((value)=> {
+            function throwFn() { try { as[type](value) } catch (e) { throw e } }
+            value.constructor.name.toLowerCase() !== type.toLowerCase() && expect(throwFn).to.throw();
+        }));
+    });
+
+
     it('any positive tests', ()=> {
-        typeof_.concat(special_).forEach((value)=> expect(is.any(value)).to.be.equal(value));
+        primitive_.concat(structural_).forEach((value)=> expect(is.any(value)).to.be.equal(value));
     });
 
     it('validator positive tests', () => {
@@ -126,25 +148,39 @@ describe('strict-type-checker tests', function () {
         is.empty(object_) && as.empty(object_);
         is.empty(set_) && as.empty(set_);
         is.empty(map_) && as.empty(map_);
-        is.empty(weakSet_) && as.empty(weakSet_);
-        is.empty(weakMap_) && as.empty(weakMap_);
-        is.empty(weakRef_) && as.empty(weakRef_);
-        is.empty(weakRef_) && as.empty(weakRef_);
         is.notEmpty(string_) && as.notEmpty('string_');
         is.notEmpty(exampleArray) && as.notEmpty(exampleArray);
         is.notEmpty(exampleObject) && as.notEmpty(exampleObject);
         is.notEmpty(exampleSet) && as.notEmpty(exampleSet);
         is.notEmpty(exampleMap) && as.notEmpty(exampleMap);
-        is.notEmpty(weakSet_.add(object_)) && as.notEmpty(weakSet_.add(object_));
-        is.notEmpty(weakMap_.set(object_, 1)) && as.notEmpty(weakMap_.set(object_, 1));
-        is.notEmpty(new WeakRef({t:1})) && as.notEmpty(new WeakRef({t:1}));
     });
+
+    it('validator negative tests', ()=> {
+       withLengthEmpty.forEach((value)=> {
+            function throwFn() { try { as.notEmpty(value) } catch (e) { throw e } }
+            type.toLowerCase()!== typeof value && expect(throwFn).to.throw();
+        });
+       withLengthNotEmpty.forEach((value)=> {
+            function throwFn() { try { as.empty(value) } catch (e) { throw e } }
+            type.toLowerCase()!== typeof value && expect(throwFn).to.throw();
+        });
+
+    });
+
 
     it('Checking one repeated type string positive tests in object, array, set and map', () => {
         is.strings(exampleObject) && as.strings(exampleObject);
         is.strings(exampleArray) && as.strings(exampleArray);
         is.strings(exampleSet) && as.strings(exampleSet);
         is.strings(exampleMap) && as.strings(exampleMap);
+        primitiveTypes.forEach((type)=> primitive_.forEach((value)=> {
+            const exampleMap = new Map();
+            type.toLowerCase()=== typeof value && as[`${type}s`]([value]);
+            type.toLowerCase()=== typeof value && as[`${type}s`]({prop: value});
+            type.toLowerCase()=== typeof value && as[`${type}s`](new Set([value]));
+            Object.keys({prop: value}).forEach((item)=> exampleMap.set(item, exampleObject[item]));
+            type.toLowerCase()=== typeof value && as[`${type}s`](exampleMap);
+        }));
     });
 
     it('multi type positive tests', ()=> {

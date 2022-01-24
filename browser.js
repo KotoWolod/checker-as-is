@@ -1,4 +1,4 @@
-import { Checker, BaseInterface } from './src/as-is.browser.min.js';
+import { Checker, BaseInterface } from './index.js';
 import MyInterface from "./tests/MyInterface.interface.js";
 const tc = new Checker();
 const { multi, Interface, Strict, type, as, is } = tc;
@@ -38,10 +38,10 @@ const exampleMap = new Map();
 Object.keys(exampleObject).forEach((item)=> exampleMap.set(item, exampleObject[item]));
 
 const typeof_ = [string_, number_, boolean_, symbol_, function_, bigInt_];
-const special_ = [ array_, date_, object_, set_, map_, weakSet_, weakMap_, weakRef_,
+const structural_ = [ array_, date_, object_, set_, map_, weakSet_, weakMap_, weakRef_,
     regExp_, promise_, json_, json5_, error_, rangeError_, referenceError_, syntaxError_, typeError_,
     checker_];
-const numerous_ = typeof_.concat(special_.slice(-1));
+const numerous_ = typeof_.concat(structural_.slice(-1));
 
 is.string(string_) && as.string(string_);
 is.String(string_) && as.String(string_);
