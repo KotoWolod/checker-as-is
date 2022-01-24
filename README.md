@@ -79,7 +79,7 @@ npm i checker-as-is -S
 ```
 **Browsers**
 ```html
-<script type="module" src="https://unpkg.com/checker-as-is@^0.7.1/src/as-is.browser.min.js"></script>
+<script type="module" src="https://unpkg.com/checker-as-is@latest/src/as-is.browser.min.js"></script>
 ```
 # API
 **Checker-as-is** is a stateful module. This means that the instance holds the state of the strict object, interfaces and more. Please keep this in mind.
