@@ -1,6 +1,6 @@
 {
   "name": "checker-as-is",
-  "version": "0.7.3",
+  "version": "0.7.31",
   "description": "Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object and more.",
   "main": "index.js",
   "type": "module",
@@ -22,6 +22,7 @@
     "javascript",
     "ESNext",
     "typechecker",
+    "enum-type",
     "strict-type",
     "multi-type",
     "repeated-type-check",
@@ -36,6 +37,7 @@
     "define-type",
     "get-type",
     "what-type",
+    "is-enum",
     "is-string",
     "is-number",
     "is-boolean",
