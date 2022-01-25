@@ -1,8 +1,10 @@
-# checker-as-is v0.7.2
+# checker-as-is v0.7.3
 
-Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object and more.
+Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
- 
+
+P.S. Fixed many bugs. Please send me more.
+
 ### Summary of Features 
 **Types list with alias name:** 
 - Number | number 
@@ -14,6 +16,7 @@ Follow me on twitter for further updates [twitter](https://twitter.com/Volodymyr
 - Array | array
 - Date | date
 - Object | date
+- **Enum | enum**
 - Set | set
 - Map | map
 - WeakSet | weakSet | weeakset
@@ -27,6 +30,7 @@ Follow me on twitter for further updates [twitter](https://twitter.com/Volodymyr
 - SyntaxError |syntaxError
 - TypeError | typeError
 - Any | any
+
 
 **Multi type checking:**
 - String | Number | Boolean | etc ... 
@@ -90,7 +94,7 @@ as['js type here']('argument here') // argument | TypeError
 ```
 An example
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 
@@ -104,7 +108,7 @@ as.string('example string'); // TypeError: String is not a(an) number
 ```
 ## Basic Usage
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
@@ -119,7 +123,7 @@ example(text, 2, true)
 ```
 or next syntax
 ```js 
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
@@ -132,7 +136,7 @@ example(text, 2, true)
 ```
 or more extraordinary syntax
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3,
@@ -145,7 +149,7 @@ example(text, 2, true)
 ```
 For more code readability:
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 is?.string('example string');
@@ -153,7 +157,7 @@ as?.string('example string');
 ```
 ### You can even check the class type
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const instance = new Checker();
 
 is.Checker(Checker); // class Checker
@@ -187,7 +191,7 @@ strict.name = 'Stephen Hawking';
 ```
 ### Basic usage
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 //-- Do it once!
 const strict = new Strict(
@@ -248,7 +252,7 @@ console.log(strict.values());
 ```
 Any tricks will not help you get the second strict object. Maybe I'll find a solution for this because I think it's a bug, not a feature :)
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 type.string`example`;
@@ -389,10 +393,111 @@ You can to get all interfaces from Checker instance like this:
 const intefaces = Interface({});
 // => { IUser, IBook, IMyInterface }
 ```
+
+## Enum type
+### Basic
+```js
+Enum.init('enum object here')
+```
+### Basic usage
+Use increment
+```js
+Enum.init({
+    RED: 0,
+    GREEN: Enum.inc,
+    BLUE: Enum.inc,
+});
+
+// Enum {
+//   '0': 'RED',
+//   '1': 'GREEN',
+//   '2': 'BLUE',
+//   RED: 0,
+//   GREEN: 1,
+//   BLUE: 2
+// }
+```
+Use decrement
+```js
+Enum.init({
+    ROOF: 2,
+    FLOOR: Enum.dec,
+    BASEMENT: Enum.dec,
+});
+// Enum {
+//   '0': 'BASEMENT',
+//   '1': 'FLOOR',
+//   '2': 'ROOF',
+//   ROOF: 2,
+//   FLOOR: 1,
+//   BASEMENT: 0
+// }
+```
+Use both
+```js
+Enum.init({
+    RED: 0,
+    GREEN: Enum.inc,
+    BLUE: Enum.inc,
+    ROOF: 6,
+    FLOOR: Enum.dec,
+    BASEMENT: Enum.dec,
+});
+// Enum {
+//   '0': 'RED',
+//   '1': 'GREEN',
+//   '2': 'BLUE',
+//   '4': 'BASEMENT',
+//   '5': 'FLOOR',
+//   '6': 'ROOF',
+//   RED: 0,
+//   GREEN: 1,
+//   BLUE: 2,
+//   ROOF: 6,
+//   FLOOR: 5,
+//   BASEMENT: 4
+// }
+```
+Use with step
+```js
+Enum.init({
+    [Enum.step]: 10, // ['Enum.step'] the same but with a quotes
+    RED: Enum.inc,
+    GREEN: Enum.inc,
+    BLUE: Enum.inc,
+});
+
+// Enum {
+//   '10': 'RED',
+//   '20': 'GREEN',
+//   '30': 'BLUE',
+//   RED: 0,
+//   GREEN: 1,
+//   BLUE: 2
+// }
+Enum.init({
+    [Enum.step]: 10,
+    ROOF: Enum.dec,
+    FLOOR: 30,
+    BASEMENT: Enum.dec,
+});
+// Enum {
+//   '10': 'ROOF',
+//   '20': 'BASEMENT',
+//   '30': 'FLOOR',
+//   ROOF: 10,
+//   FLOOR: 30,
+//   BASEMENT: 20
+// }
+```
+Check the Enum type like this
+```js
+as.Enum(enumExample) && as.enum(enumExample);
+```
 ## Integration
 You can integrate any feature you want.
 ```js
-import { Checker, BaseInterface } from 'checker-as-is';
+import { Checker, BaseInterface, Enum }from 'checker-as-is';
 import axios from "axios";
 
 const integrate = {

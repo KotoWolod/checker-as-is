@@ -1,4 +1,4 @@
-import { Checker, BaseInterface } from './index.js';
+import { Checker, BaseInterface, Enum } from './index.js';
 import MyInterface from "./tests/MyInterface.interface.js";
 const tc = new Checker();
 const { multi, Interface, Strict, type, as, is } = tc;
@@ -150,7 +150,17 @@ const intefaces = Interface({});
 
 const { IMyInterface } = Interface({ IMyInterface: new MyInterface });
 as.IMyInterface = { name: 'Tomas', age: 12, surName: 'Andersen' };
-
+const enumExample = Enum.init({
+    [Enum.step]: 1,
+    Monday: 1,
+    Tuesday: Enum.inc,
+    Wednesday: Enum.dec,
+    Thursday: Enum.inc,
+    Friday: Enum.dec,
+    Saturday: 'day off',
+    Sunday: 'super day off'
+});
+as.Enum(enumExample) && as.Enum(enumExample);
 window.document.body.innerHTML=`
 <div style="text-align: left; padding-left: 20%"> <h2>Syntax</h2>
 is.string(string_) && as.string(string_);<br>
@@ -264,6 +274,17 @@ const intefaces = Interface({});<br>
 <br>
 const { IMyInterface } = Interface({ IMyInterface: new MyInterface });<br>
 as.IMyInterface = { name: 'Tomas', age: 12, surName: 'Andersen' };<br>
+const enumExample = Enum.init({<br>
+    [Enum.step]: 1,<br>
+    Monday: 1,<br>
+    Tuesday: Enum.inc,<br>
+    Wednesday: Enum.dec,<br>
+    Thursday: Enum.inc,<br>
+    Friday: Enum.dec,<br>
+    Saturday: 'day off',<br>
+    Sunday: 'super day off'<br>
+});<br>
+as.Enum(enumExample) && as.Enum(enumExample);<br>
 <h3>works!</h3> </div>
 <h2 style="text-align: center"> All tests completed</h2>
 `;

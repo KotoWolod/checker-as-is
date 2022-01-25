@@ -1,5 +1,5 @@
 import { mocha, describe, it, expect, before } from './header.js';
-import { Checker, BaseInterface } from '../index.js';
+import { Checker, BaseInterface, Enum } from '../index.js';
 import primitiveTypes from '../lib/types/primitiveTypes.js';
 import structuralTypes from '../lib/types/structuralTypes.js';
 import otherTypes from '../lib/types/otherTypes.js';
@@ -249,5 +249,26 @@ describe('strict-type-checker tests', function () {
 
         const { IMyInterface } = Interface({ IMyInterface: new MyInterface });
         as.IMyInterface = { name: 'Tomas', age: 12, surName: 'Andersen' };
-    })
+    });
+
+    it('Enum tests positive/negative', ()=> {
+        const enumExample = Enum.init({
+                [Enum.step]: 1,
+                Monday: 1,
+                Tuesday: Enum.inc,
+                Wednesday: Enum.dec,
+                Thursday: Enum.inc,
+                Friday: Enum.dec,
+                Saturday: 'day off',
+                Sunday: 'super day off'
+        });
+
+        console.log(enumExample, enumExample.Saturday);
+        function throwFn() { try { enum01.notPossible = 'Realy ?' } catch (e) { throw e } }
+        function throwENum() { try { as.Enum('not Enum') } catch (e) { throw e } }
+
+        expect(throwFn).to.throw();
+        as.Enum(enumExample) && as.enum(enumExample);
+        expect(throwENum).to.throw();
+    });
 });
