@@ -3,8 +3,6 @@
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
 
-P.S. Fixed many bugs. Please send me more.
-
 ### Summary of Features 
 **Types list with alias name:** 
 - Number | number 
@@ -471,9 +469,9 @@ Enum.init({
 //   '10': 'RED',
 //   '20': 'GREEN',
 //   '30': 'BLUE',
-//   RED: 0,
-//   GREEN: 1,
-//   BLUE: 2
+//   RED: 10,
+//   GREEN: 20,
+//   BLUE: 30
 // }
 Enum.init({
     [Enum.step]: 10,
