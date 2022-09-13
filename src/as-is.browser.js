@@ -1,4 +1,4 @@
-const primitiveTypes = ['Number', 'String', 'Boolean', 'Symbol', 'Function', 'BigInt'];
+const primitiveTypes = ['Number', 'String', 'Boolean', 'Symbol', 'Function', 'BigInt', 'Undefined'];
 const structuralTypes =  ['Array', 'Date', 'Object', 'Set', 'Map', 'WeakSet', 'WeakMap', 'WeakRef', 'RegExp',
     'Promise', 'Error', 'RangeError', 'ReferenceError', 'SyntaxError', 'TypeError'];
 const otherTypes = [
@@ -6,6 +6,7 @@ const otherTypes = [
     { alias: ['Empty', 'empty'], method4type: 'empty' },
     { alias: ['NotEmpty', 'notEmpty', 'notempty'], method4type: 'notEmpty' },
     { alias: ['Date', 'date'], method4type: 'date' },
+    { alias: ['Null', 'null'], method4type: 'null' },
     { alias: ['JSON', 'json', 'Json'], method4type: 'json' },
     { alias: ['JSON5', 'json5', 'Json5'], method4type: 'json5' }
 ]
@@ -28,8 +29,7 @@ class Checker {
         get(target, name) {
             target.#error = this.swap;
             target.#typeValue = name;
-            target.isCall = true;
-            return new Proxy(()=> 0, { apply: target.#apply.bind(target)});
+            return new Proxy(()=> 0, { apply: ()=> !!target.#apply.bind(target)});
         }
     });
 
@@ -43,7 +43,7 @@ class Checker {
                 return resultObj;
             };
             this.lastType = name;
-            return this[name] ? this[name]: new Proxy(()=>0, { apply: target.#setApply.bind(this) });
+            return this[name] ? this[name]: new Proxy(()=> 0, { apply: target.#setApply.bind(this) });
         },
         set(target, prop, value) {
             this.variables.forEach((varName, idx)=> {
@@ -107,10 +107,6 @@ class Checker {
             default:
                 returned = this.check(value, target() || this.#typeValue, method4type);
         }
-        if(this.isCall){
-            returned = [undefined, 0, 0n, '', null, NaN].includes(returned) || !!returned;
-            this.isCall = false;
-        }
         return returned;
     };
 
@@ -148,9 +144,11 @@ class Checker {
     }
 
     check(...params) {
-        const [ arg,$type, ruleName ] = params;
-        let result = Checker[ruleName].bind(this)(params) ? arg: false;
-        result = result === undefined ? 'undefined': result;
+        const [ arg, $type, ruleName ] = params;
+        const checkedValue = Checker[ruleName].bind(this)(params);
+        let result = ([undefined, 'undefined', 'null',0, 0n, '', null, NaN].includes(checkedValue) || !!checkedValue)
+            ? arg
+            : false;
         if(this.#error) return result !== false ? result: this.#typeError([arg, $type]);
         else return result;
     }
@@ -162,8 +160,8 @@ class Checker {
     static multiCheck(value, typeValue){
         return primitiveTypes
             .concat(structuralTypes)
-            .concat(otherTypes)
-            .filter((type)=> typeValue.includes(type) ? type: null);
+            .concat(otherTypes.map((type)=> type.alias).flat(1))
+            .filter((type)=> typeValue.toLowerCase().includes(type.toLowerCase()) ? type: null);
     }
 
     static multiType(params) {
@@ -228,7 +226,7 @@ class Checker {
         return arg;
     }
 
-    static primitive(params){
+    static primitive(params) {
         const [arg, $type] = params;
         return (typeof arg === $type.toLowerCase());
     }
@@ -265,7 +263,7 @@ class Checker {
             case arg?.length === 0: meOut = true;
                 break;
         }
-        return meOut;
+        return !!meOut;
     }
 
     static notEmpty(params) {
@@ -281,12 +279,17 @@ class Checker {
             case arg?.length > 0: meOut = true;
                 break;
         }
-        return meOut;
+        return !!meOut;
     }
 
     static date(params) {
         const [arg] = params;
         return arg instanceof Date;
+    }
+
+    static null(params) {
+        const [arg] = params;
+        return arg === null;
     }
 
     static structural(params) {

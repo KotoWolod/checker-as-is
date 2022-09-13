@@ -64,8 +64,8 @@ describe('strict-type-checker tests', function () {
         is.Number(number_) && as.Number(number_);
         is.boolean(boolean_) && as.boolean(boolean_);
         is.Boolean(boolean_) && as.Boolean(boolean_);
-        is.bigInt(boolean_) && as.bigInt(boolean_);
-        is.BigInt(boolean_) && as.BigInt(boolean_);
+        is.bigInt(bigInt_) && as.bigInt(bigInt_);
+        is.BigInt(bigInt_) && as.BigInt(bigInt_);
         expect(value).to.be.equal(string_);
         expect(is.string(string_)).to.be.equal(true);
         expect(is.String(string_)).to.be.equal(true);
@@ -86,7 +86,6 @@ describe('strict-type-checker tests', function () {
     it('structural positive tests', () => {
         is.undefined(undefined_) && as.undefined(undefined_);
         is.null(null_) && as.null(null_);
-        is.array(undefined_) && as.array(undefined_);
         is.array(array_) && as.array(array_);
         is.date(date_) && as.date(date_);
         is.object(object_) && as.object(object_);

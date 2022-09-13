@@ -1,4 +1,4 @@
-# checker-as-is v0.7.4
+# checker-as-is v0.8.0
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
@@ -87,17 +87,17 @@ npm i checker-as-is -S
 **Checker-as-is** is a stateful module. This means that the instance holds the state of the strict object, interfaces and more. Please keep this in mind.
 ## Basics
 ```js
-is['js type here']('argument here') // argument | false
+is['js type here']('argument here') // true | false
 as['js type here']('argument here') // argument | TypeError
 ```
 An example
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 
 //positive
-is.string('example string'); // 'example string'
+is.string('example string'); // true
 as.string('example string'); // 'example string'
 
 //negative
@@ -106,7 +106,7 @@ as.string('example string'); // TypeError: String is not a(an) number
 ```
 ## Basic Usage
 ```js
-import { Checker, BaseInterface, Enum } from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
@@ -121,7 +121,7 @@ example(text, 2, true)
 ```
 or next syntax
 ```js 
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
@@ -134,7 +134,7 @@ example(text, 2, true)
 ```
 or more extraordinary syntax
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3,
@@ -147,7 +147,7 @@ example(text, 2, true)
 ```
 For more code readability:
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 is?.string('example string');
@@ -155,13 +155,13 @@ as?.string('example string');
 ```
 ### You can even check the class type
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const instance = new Checker();
 
-is.Checker(Checker); // class Checker
+is.Checker(Checker); // true
 as.Checker(Checker);// class Checker
 
-is.Checker(instance); // class instance
+is.Checker(instance); // true
 as.Checker(instance);// class instance
 
 
@@ -189,7 +189,7 @@ strict.name = 'Stephen Hawking';
 ```
 ### Basic usage
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 //-- Do it once!
 const strict = new Strict(
@@ -250,14 +250,14 @@ console.log(strict.values());
 ```
 Any tricks will not help you get the second strict object. Maybe I'll find a solution for this because I think it's a bug, not a feature :)
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 type.string`example`;
 strict.example = 'first';
 
 // even second import
-import { default as CEngine }   from 'checker-as-is';
+import { default as CEngine } from 'checker-as-is';
 const { Strict: secondStrict } = new CEngine();
 
 const secondStrict = new SecondStrict(type.null`get`);
@@ -271,7 +271,7 @@ secondStrict.values();
 When a variable is part of more than one type, you can also check for that. 
 ### Basic
 ```js
-is['couple js type here']('argument here'); // argument | false
+is['couple js type here']('argument here'); // true | false
 as['couple js type here']('argument here'); // argument | TypeError
 
 // as alias syntax
@@ -311,7 +311,7 @@ const { [InterfaceName] } = Interface({
 ```
 Working example
 ```js
-const {  Interface, as } = new Checker();
+const { Interface, as } = new Checker();
 
 const { IUser } = Interface({
     IUser: {
@@ -331,9 +331,11 @@ You can use **BaseInterface** to create an interface object after instantiation.
 // MyInterface.interface.js
 
 export default class MyInterface extends BaseInterface {
+
+    age = ()=> as.number;
+    
     constructor() {
         super(MyInterface);
-        this.age = ()=> as.number;
     }
 
     name() {
@@ -495,7 +497,7 @@ as.Enum(enumExample) && as.enum(enumExample);
 ## Integration
 You can integrate any feature you want.
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
 import axios from "axios";
 
 const integrate = {
