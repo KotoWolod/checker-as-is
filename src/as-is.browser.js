@@ -29,7 +29,7 @@ class Checker {
         get(target, name) {
             target.#error = this.swap;
             target.#typeValue = name;
-            return new Proxy(()=> 0, { apply: ()=> !!target.#apply.bind(target)});
+            return new Proxy(()=> 0, { apply: target.#applyIs.bind(target) })
         }
     });
 
@@ -78,6 +78,11 @@ class Checker {
         }
     });
 
+    #applyIs(target, thisVal, [value]) {
+        let result = this.#apply(target, thisVal, [value]);
+        result = [undefined, 'undefined', 'null',0, 0n, '', null, NaN].includes(result) || !!result;
+        return result;
+    }
 
     #apply(target, thisVal, [value]) {
         let method4type;
