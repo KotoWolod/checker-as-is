@@ -372,5 +372,5 @@ const Enum = new Proxy(handler, {
     }
 })
 
-export { Checker, BaseInterface, Enum };
+export { Checker, BaseInterface, Enum, JSON5 };
 
