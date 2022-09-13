@@ -1,4 +1,4 @@
-# checker-as-is v0.7.3
+# checker-as-is v0.7.4
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
@@ -106,7 +106,7 @@ as.string('example string'); // TypeError: String is not a(an) number
 ```
 ## Basic Usage
 ```js
-import { Checker, BaseInterface, Enum }from 'checker-as-is';
+import { Checker, BaseInterface, Enum } from 'checker-as-is';
 const { multi, Strict, type, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {

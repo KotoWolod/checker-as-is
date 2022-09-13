@@ -57,7 +57,7 @@ describe('strict-type-checker tests', function () {
     this.timeout(0);
 
     it('typeof positive tests', () => {
-        const value = is.string(string_);
+        const value = as.string(string_);
         is.string(string_) && as.string(string_);
         is.String(string_) && as.String(string_);
         is.number(number_) && as.number(number_);
@@ -67,13 +67,13 @@ describe('strict-type-checker tests', function () {
         is.bigInt(boolean_) && as.bigInt(boolean_);
         is.BigInt(boolean_) && as.BigInt(boolean_);
         expect(value).to.be.equal(string_);
-        expect(is.string(string_)).to.be.equal(string_);
-        expect(is.String(string_)).to.be.equal(string_);
-        expect(is.number(number_)).to.be.equal(number_);
-        expect(is.Number(number_)).to.be.equal(number_);
-        expect(is.boolean(boolean_)).to.be.equal(boolean_);
-        expect(is.Boolean(boolean_)).to.be.equal(boolean_);
-        expect(is.BigInt(bigInt_)).to.be.equal(bigInt_);
+        expect(is.string(string_)).to.be.equal(true);
+        expect(is.String(string_)).to.be.equal(true);
+        expect(is.number(number_)).to.be.equal(true);
+        expect(is.Number(number_)).to.be.equal(true);
+        expect(is.boolean(boolean_)).to.be.equal(true);
+        expect(is.Boolean(boolean_)).to.be.equal(true);
+        expect(is.BigInt(bigInt_)).to.be.equal(true);
     });
 
     it('primitive negative tests', ()=> {
@@ -107,27 +107,27 @@ describe('strict-type-checker tests', function () {
         is.json5(json5_) && as.json5(json5_);
         is.Checker(checker_) && as.Checker(checker_);
         is.Checker(Checker) && as.Checker(Checker);
-        expect(is.array(array_)).to.be.equal(array_);
-        expect(is.date(date_)).to.be.equal(date_);
-        expect(is.object(object_)).to.be.equal(object_);
-        expect(is.set(set_)).to.be.equal(set_);
-        expect(is.map(map_)).to.be.equal(map_);
-        expect(is.WeakSet(weakSet_)).to.be.equal(weakSet_);
-        expect(is.WeakMap(weakMap_)).to.be.equal(weakMap_);
-        expect(is.WeakRef(weakRef_)).to.be.equal(weakRef_);
-        expect(is.RegExp(regExp_)).to.be.equal(regExp_);
-        expect(is.error(error_)).to.be.equal(error_);
-        expect(is.RangeError(rangeError_)).to.be.equal(rangeError_);
-        expect(is.ReferenceError(referenceError_)).to.be.equal(referenceError_);
-        expect(is.SyntaxError(syntaxError_)).to.be.equal(syntaxError_);
-        expect(is.TypeError(typeError_)).to.be.equal(typeError_);
-        expect(is.Buffer(buffer_)).to.be.equal(buffer_);
-        expect(is.Buffer(buffer_)).to.equalBytes('0000000000');
-        expect(is.Promise(promise_)).to.be.equal(promise_);
-        expect(is.JSON(json_)).to.be.equal(json_);
-        expect(is.JSON5(json5_)).to.be.equal(json5_);
-        expect(is.Checker(checker_)).to.be.equal(checker_);
-        expect(is.Checker(Checker)).to.be.equal(Checker);
+        expect(is.array(array_)).to.be.equal(true);
+        expect(is.date(date_)).to.be.equal(true);
+        expect(is.object(object_)).to.be.equal(true);
+        expect(is.set(set_)).to.be.equal(true);
+        expect(is.map(map_)).to.be.equal(true);
+        expect(is.WeakSet(weakSet_)).to.be.equal(true);
+        expect(is.WeakMap(weakMap_)).to.be.equal(true);
+        expect(is.WeakRef(weakRef_)).to.be.equal(true);
+        expect(is.RegExp(regExp_)).to.be.equal(true);
+        expect(is.error(error_)).to.be.equal(true);
+        expect(is.RangeError(rangeError_)).to.be.equal(true);
+        expect(is.ReferenceError(referenceError_)).to.be.equal(true);
+        expect(is.SyntaxError(syntaxError_)).to.be.equal(true);
+        expect(is.TypeError(typeError_)).to.be.equal(true);
+        expect(is.Buffer(buffer_)).to.be.equal(true);
+        expect(is.Buffer(buffer_)).to.equal(true);
+        expect(is.Promise(promise_)).to.be.equal(true);
+        expect(is.JSON(json_)).to.be.equal(true);
+        expect(is.JSON5(json5_)).to.be.equal(true);
+        expect(is.Checker(checker_)).to.be.equal(true);
+        expect(is.Checker(Checker)).to.be.equal(true);
     });
 
     it('structural negative tests', ()=> {
@@ -139,7 +139,7 @@ describe('strict-type-checker tests', function () {
 
 
     it('any positive tests', ()=> {
-        primitive_.concat(structural_).forEach((value)=> expect(is.any(value)).to.be.equal(value));
+        primitive_.concat(structural_).forEach((value)=> expect(is.any(value)).to.be.equal(true));
     });
 
     it('validator positive tests', () => {
