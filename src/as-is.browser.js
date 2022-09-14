@@ -80,7 +80,7 @@ class Checker {
 
     #applyIs(target, thisVal, [value]) {
         let result = this.#apply(target, thisVal, [value]);
-        result = [undefined, 'undefined', 'null',0, 0n, '', null, NaN].includes(result) || !!result;
+        result = [undefined,  0, 0n, '', null, NaN].includes(result) || !!result;
         return result;
     }
 
@@ -151,7 +151,7 @@ class Checker {
     check(...params) {
         const [ arg, $type, ruleName ] = params;
         const checkedValue = Checker[ruleName].bind(this)(params);
-        let result = ([undefined, 'undefined', 'null',0, 0n, '', null, NaN].includes(checkedValue) || !!checkedValue)
+        let result = ([undefined, 0, 0n, '', null, NaN].includes(checkedValue) || !!checkedValue)
             ? arg
             : false;
         if(this.#error) return result !== false ? result: this.#typeError([arg, $type]);
@@ -299,7 +299,7 @@ class Checker {
 
     static structural(params) {
         const [arg, $type] = params;
-        return arg.constructor.name.toLowerCase() === $type.toLowerCase();
+        return !!arg?.constructor && arg.constructor.name.toLowerCase() === $type.toLowerCase();
     }
 
     static class(params) {
