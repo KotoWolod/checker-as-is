@@ -56,6 +56,13 @@ const withLengthNotEmpty = ['string_', exampleArray, exampleObject, exampleSet, 
 describe('strict-type-checker tests', function () {
     this.timeout(0);
 
+    it.skip('delme', ()=> {
+        Interface( { IRender:{
+            elementOrHtml: as.StringNullUndefinedObjectClass,
+        }});
+        as.IRender = { elementOrHtml: 12 }
+    });
+
     it('typeof positive tests', () => {
         const value = as.string(string_);
         is.string(string_) && as.string(string_);
@@ -247,7 +254,7 @@ describe('strict-type-checker tests', function () {
         const intefaces = Interface({});
 
         const { IMyInterface } = Interface({ IMyInterface: new MyInterface });
-        as.IMyInterface = { name: 'Tomas', age: 12, surName: 'Andersen' };
+        as.IMyInterface = { name: 'Tomas', age: '12', surName: 9 };
     });
 
     it('Enum tests positive/negative', ()=> {
