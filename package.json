@@ -1,6 +1,6 @@
 {
   "name": "checker-as-is",
-  "version": "0.8.3",
+  "version": "0.8.31",
   "description": "Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object and more.",
   "main": "index.js",
   "type": "module",

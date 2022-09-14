@@ -7,6 +7,7 @@ const otherTypes = [
     { alias: ['NotEmpty', 'notEmpty', 'notempty'], method4type: 'notEmpty' },
     { alias: ['Date', 'date'], method4type: 'date' },
     { alias: ['Null', 'null'], method4type: 'null' },
+    { alias: ['Class', 'class'], method4type: 'class' },
     { alias: ['JSON', 'json', 'Json'], method4type: 'json' },
     { alias: ['JSON5', 'json5', 'Json5'], method4type: 'json5' }
 ]
