@@ -71,7 +71,7 @@ const sum_first_plus_second = as.first_number(2) + as.second_number(3);     // t
 ```
 And, of course, the is.doctor_prescription a_string method is not implemented, because doctor_prescription_a_string_variable is just an unquoted string variable.
 
-### Summary of Features 
+# Summary of Features 
 **Types list with alias name:** 
 - Number | number 
 - String | string
