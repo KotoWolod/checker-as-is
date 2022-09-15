@@ -72,7 +72,7 @@ as.StringNumber(example({ name: 'text', age: 12, pages:['page'] }));
     import {default as email} from 'validator/lib/isEmail';
     
     is.email('foo@bar.com'); // true | false
-    as.email('foo@bar.com'); // true | TypeError
+    as.email('foo@bar.com'); // foo@bar.com | TypeError
 
 ## Install
 **Node.js**
@@ -220,7 +220,7 @@ Once the strict instance has been created, you can do the following:
 type.string`example`;
 strict.example = '2';
 ```
-**Strict has reserved variable names:** get, set, values, types, variable, lastType. This means that you can do the following;
+**Strict has reserved variable names:** get, set, values, types, variable, lastType. This means that you can't do the following;
 ```js
 const strict = new Strict(type.null`get`);
 //or
