@@ -306,12 +306,12 @@ class Checker {
     static class(params) {
         const [arg, $type] = params;
         const standartTypes = primitiveTypes.concat(structuralTypes).concat(otherTypes.map((type)=> type.alias).flat(1))
-        let meOut = !arg
+        let meOut = (!arg && ![undefined, 0, 0n, '', null, NaN].includes(arg))
             || !$type
-            || (arg?.name === $type.split(':')[1] && arg?.name !== undefined)
-            || arg?.constructor?.name === $type.split(':')[1]
+            || (arg?.name === $type.split(':')[1] && ![undefined, 0, 0n, '', null, NaN].includes(arg))
+            || (arg?.constructor?.name === $type.split(':')[1] && ![undefined, 0, 0n, '', null, NaN].includes(arg))
             || (arg?.prototype?.constructor?.name === $type.split(':')[1] && arg?.prototype?.constructor?.name !== undefined)
-            || !standartTypes.includes(arg?.constructor?.name)
+            || (!standartTypes.includes(arg?.constructor?.name) && ![undefined, 0, 0n, '', null, NaN].includes(arg))
             || (!standartTypes.includes(arg?.prototype?.constructor?.name) && arg?.prototype !== undefined)
 
         return meOut;
