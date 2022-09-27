@@ -56,10 +56,6 @@ const withLengthNotEmpty = ['string_', exampleArray, exampleObject, exampleSet, 
 describe('strict-type-checker tests', function () {
     this.timeout(0);
 
-    it.only('delme', ()=> {
-        is.class(NaN);
-    })
-
     it('typeof positive tests', () => {
         const value = as.string(string_);
         is.string(string_) && as.string(string_);
