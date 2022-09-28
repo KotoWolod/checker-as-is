@@ -126,6 +126,9 @@ class Checker {
         this.is = this.#proxyIs;
         this.type = this.#proxySet;
         this.as = this.#proxyAs;
+        this.IF = this.#proxyIs;
+        this.ELSE = this.#proxyIs;
+        this.END = null;
         this.Strict = Object;
         this.Interface = function (object) {
             this.as.Object(object);

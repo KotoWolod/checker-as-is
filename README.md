@@ -82,6 +82,8 @@ And, of course, the is.doctor_prescription a_string method is not implemented, b
 - Array | array
 - Date | date
 - Object | date
+- **Class | class**
+- **instance**
 - **Enum | enum**
 - Set | set
 - Map | map
