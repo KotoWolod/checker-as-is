@@ -1,4 +1,4 @@
-# checker-as-is v0.8.45 RC1
+# checker-as-is v0.8.5 RC1
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
@@ -100,6 +100,15 @@ And, of course, the is.doctor_prescription a_string method is not implemented, b
 
 **Multi type checking:**
 - String | Number | Boolean | etc ... 
+
+**IF/ELSE/END for type checking**
+
+        IF.number(string_)? (
+            console.log('IF type checking')
+        ):ELSE.string(string_)? (
+            console.log('ELSE type checking'),
+            expect(string_).to.be.eq(string_)
+        ):END;
 
 **Strict type object:**
     

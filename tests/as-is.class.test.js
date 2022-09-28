@@ -7,7 +7,7 @@ import otherTypes from '../lib/types/otherTypes.js';
 import MyInterface from './MyInterface.interface.js';
 
 const tc = new Checker();
-const { multi, Interface, Strict, type, as, is }  = tc;
+const { multi, Interface, Strict, type, as, is, IF, ELSE, END }  = tc;
 
 const string_ = '';
 const number_ = 2;
@@ -55,6 +55,15 @@ const withLengthNotEmpty = ['string_', exampleArray, exampleObject, exampleSet, 
 
 describe('strict-type-checker tests', function () {
     this.timeout(0);
+
+    it('if/else type checking', ()=> {
+        IF.number(string_)? (
+            console.log('IF type checking')
+        ):ELSE.string(string_)? (
+            console.log('ELSE type checking'),
+            expect(string_).to.be.eq(string_)
+        ):END;
+    })
 
     it('typeof positive tests', () => {
         const value = as.string(string_);
