@@ -5,10 +5,10 @@ Follow me on twitter for further updates [twitter](https://twitter.com/Volodymyr
 
 This library respects the principle of code readability. The code should tell a story.
 
-    I.want.to.tel.you.a story(myStory;)
+    I.want.to.tel.you.a.story(myStory)
 
 ## The main idea is to use proxies instead of functions
-In tradition way we use functions to do the call
+In traditional way we use functions to do the call
 ```javascript
 as(type, value) 
 // or 
@@ -52,7 +52,7 @@ function as(type, value) {
 // and after that to use it like a function call
 is('number', 33) // instead of is.number(33)
 ```
-So, if the property name in the is/as call is a string variable, you can do cool things. If you implement two methods for checking strings and numbers as an example, you can do it like this.
+So, if the property name in the is/as calsl is a string variable, you can do cool things. If you implement two methods for checking strings and numbers as an example, you can do it like this.
 ```javascript
 is.string_or_number(variable);
 // inside the "is" method
@@ -118,9 +118,10 @@ And, of course, the is.doctor_prescription a_string method is not implemented, b
 
 **Strict type object:**
     
-     type.string`name`
+     stric.string`name`
      strict.name = 'string'
-
+    // or
+    stric.string`name`.name = 'string'
 **Validators list:** 
 - NotEmpty | notEmpty
 - Empty | empty
@@ -130,12 +131,11 @@ And, of course, the is.doctor_prescription a_string method is not implemented, b
 **Class checking:** 
 - [className]
 - [classInstance]
-
-    
-    is.date(Date);
-    is.date(new Date);
-    is.class(Date) or is.class(new Date)
-
+```    
+is.date(Date);
+is.date(new Date);
+is.class(Date) or is.class(new Date)
+```
 **Interface**
 ```js
 const { IUser } = Interface({
@@ -173,7 +173,7 @@ npm i checker-as-is -S
 <script type="module" src="https://unpkg.com/checker-as-is@latest/src/as-is.browser.min.js"></script>
 ```
 # API
-**Checker-as-is** is a stateful module, but all type checking with **is, as, IF, ELSE** is stateless. This means that the instance holds the state of the strict object, interfaces only. Please keep this in mind.
+**Checker-as-is** is a stateful module, but all type checking with **is, as, IF, ELSE** is stateless. This means that the instance holds the state of the strict object and interfaces only. Please keep this in mind.
 ## Basics
 ```js
 is['js type here']('argument here') // true | false
@@ -268,7 +268,7 @@ as.class(instance);// class instance
 ```
 
 ## Checking one repeated type
-In object, array, set and map. All types ending in 's' will be checked.
+In object, array, set and map. All types ending with 's' will be checked.
 ```js
 is.strings(exampleObject) && as.strings(exampleObject);
 is.Numbers(exampleArray) && as.Numbers(exampleArray);
@@ -278,13 +278,10 @@ is.BigInts(exampleMap) && as.BigInts(exampleMap);
 ## Strict typing
 ### Basics
 ```js
-
-new Strict(type['js type here']`variable name`);// <-- meta programing magic
-// after that
-type['js type here']`variable name`;
+strict['js type here']`variable name`;// <-- meta programing magic
 ```
 ```js
-const strict = new Strict(type.string`name`);
+strict.string`name`;
 strict.name = 'Stephen Hawking';
 ```
 ### Basic usage
@@ -311,13 +308,13 @@ $.name = 2022; // but strict.name still has it
 // TypeError: Number is not a(an) string
 ```
 
-**Strict has reserved variable names:** get, set, values, types, variable, lastType. This means that you can't do the following;
+**Strict has reserved variable names:** get, set, variable, lastType. This means that you can't do the following;
 ```js
-const strict = new Strict(type.null`get`);
+strict.null`get`;
 //or
-const strict = new Strict(type.undefined`set`);
+strict.undefined`set`;
 //or
-const strict = new Strict(type.object`variables`);
+strict.object`variables`;
 ```
 
 ## Checking multiple types
@@ -477,15 +474,15 @@ function someFunction(name, age, friends,
     IF.string(name) && is.number(age) && is.array(friends)? (
         as.array(_) && as.notEmpty(_)
     ):ELSE.string(name) && is.array(age)? (
-        friends = age,
-            age = undefined
+        friends = age, 
+        age = undefined
     ):ELSE.number(name) && is.array(age)? (
         friends = age,
-            age = name,
-            name = undefined
+        age = name,
+        name = undefined
     ):ELSE.array(name)? (
         friends = name,
-            name = undefined
+        name = undefined
     ):END;
     console.log(`name: ${name}, age: ${age}, friends: ${friends}`);
 }
@@ -632,7 +629,7 @@ await isUrl?.up('https://not-google.com');
 ```
 ## Settings
 To change error message you can reload Checker.errorMsg.
-If you want to swap "is" on "as". In standard behaviour 'is' returns boolean and "as" throws TypeErrors. If you set Checker.swap to true, now 'as' will returns boolean and 'is' will throws TypeErrors.
+If you want to swap "is" on "as". In standard behaviour 'is' returns boolean and "as" throws TypeErrors. If you set Checker.swap to true, now 'as' will returns boolean and 'is' will throws TypeErrors. It's cool when you want to disable throwing errors by "as" and don't use "is" for logic.
 ```js
 const checker = new Checker(integrate);
 checker.errorMsg = (params)=> `${params[2] || (params[0]?.constructor 
