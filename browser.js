@@ -1,7 +1,7 @@
 import { Checker, BaseInterface, Enum } from './index.js';
 import MyInterface from "./tests/MyInterface.interface.js";
 const tc = new Checker();
-const { multi, Interface, Strict, type, as, is } = tc;
+const { multi, Interface, strict, as, is } = tc;
 
 const string_ = '';
 const number_ = 2;
@@ -94,11 +94,9 @@ is.strings(exampleObject) && as.strings(exampleObject);
 is.strings(exampleArray) && as.strings(exampleArray);
 is.strings(exampleSet) && as.strings(exampleSet);
 is.strings(exampleMap) && as.strings(exampleMap);
-const strict = new Strict(
-    type.string`name`,
-    type.number`age`,
-    type.strings`pages`
-);
+strict.string`name`;
+strict.number`age`;
+strict.strings`pages`;
 strict.name = 'Mike';
 strict.age = 12;
 strict.pages = [''];
@@ -215,15 +213,10 @@ is.strings(exampleArray) && as.strings(exampleArray);<br>
 is.strings(exampleSet) && as.strings(exampleSet);<br>
 is.strings(exampleMap) && as.strings(exampleMap);<br> 
 <br>
-const strict = new Strict(
-<p style="padding-left: 2%"> 
-    type.string\`name\`,<br>
-    type.number\`age\`,<br>
-    type.strings\`pages\`<br>
-</p>    
-);<br>
+type.string\`name\`.name = 'Mike';<br>
+type.number\`age\`;<br>
+type.strings\`pages\`;<br>
 <br>
-strict.name = 'Mike';<br>
 strict.age = 12;<br>
 strict.pages = [''];<br>
 strict.bla = 1;<br>

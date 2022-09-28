@@ -36,13 +36,6 @@ class Checker {
 
     #proxySet = new Proxy(this, {
         get(target, name) {
-            this.values = ()=> {
-                const resultObj = {};
-                Object.keys(this)
-                    .forEach((key)=> ['get', 'set', 'values', 'types', 'variables', 'lastType']
-                        .includes(key) || (resultObj[key] = this[key]));
-                return resultObj;
-            };
             this.lastType = name;
             return this[name] ? this[name]: new Proxy(()=> 0, { apply: target.#setApply.bind(this) });
         },
@@ -124,12 +117,11 @@ class Checker {
         } is not a(an) ${params[1]}`;
         this.swap = false;
         this.is = this.#proxyIs;
-        this.type = this.#proxySet;
-        this.as = this.#proxyAs;
         this.IF = this.#proxyIs;
         this.ELSE = this.#proxyIs;
         this.END = null;
-        this.Strict = Object;
+        this.strict = this.#proxySet;
+        this.as = this.#proxyAs;
         this.Interface = function (object) {
             this.as.Object(object);
             Object.assign(this.#interfaces, object);

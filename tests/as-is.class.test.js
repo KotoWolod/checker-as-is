@@ -7,7 +7,7 @@ import otherTypes from '../lib/types/otherTypes.js';
 import MyInterface from './MyInterface.interface.js';
 
 const tc = new Checker();
-const { multi, Interface, Strict, type, as, is, IF, ELSE, END }  = tc;
+const { multi, Interface, strict, as, is, IF, ELSE, END }  = tc;
 
 const string_ = '';
 const number_ = 2;
@@ -57,12 +57,32 @@ describe('strict-type-checker tests', function () {
     this.timeout(0);
 
     it('if/else type checking', ()=> {
-        IF.number(string_)? (
-            console.log('IF type checking')
-        ):ELSE.string(string_)? (
-            console.log('ELSE type checking'),
-            expect(string_).to.be.eq(string_)
-        ):END;
+        function someFunction(name, age, friends,
+                              _= [as.stringNumberArray(name),
+                                  as.undefinedNumberArray(age),
+                                  as.undefinedArray(friends)
+                              ]) {
+
+
+            IF.string(name) && is.number(age) && is.array(friends)? (
+                as.array(_) && as.notEmpty(_)
+            ):ELSE.string(name) && is.array(age)? (
+                friends = age,
+                age = undefined
+            ):ELSE.number(name) && is.array(age)? (
+                friends = age,
+                    age = name,
+                    name = undefined
+            ):ELSE.array(name)? (
+                friends = name,
+                name = undefined
+            ):END;
+            console.log(`name: ${name}, age: ${age}, friends: ${friends}`);
+        }
+        someFunction('Rick', 25, ['Mike', 'Liza']);
+        someFunction('Rick',['Mike', 'Liza']);
+        someFunction(25, ['Mike', 'Liza']);
+        someFunction(['Mike', 'Liza']);
     })
 
     it('typeof positive tests', () => {
@@ -166,11 +186,11 @@ describe('strict-type-checker tests', function () {
     it('validator negative tests', ()=> {
        withLengthEmpty.forEach((value)=> {
             function throwFn() { try { as.notEmpty(value) } catch (e) { throw e } }
-            type.toLowerCase()!== typeof value && expect(throwFn).to.throw();
+            strict.toLowerCase()!== typeof value && expect(throwFn).to.throw();
         });
        withLengthNotEmpty.forEach((value)=> {
             function throwFn() { try { as.empty(value) } catch (e) { throw e } }
-            type.toLowerCase()!== typeof value && expect(throwFn).to.throw();
+            strict.toLowerCase()!== typeof value && expect(throwFn).to.throw();
         });
 
     });
@@ -183,11 +203,11 @@ describe('strict-type-checker tests', function () {
         is.strings(exampleMap) && as.strings(exampleMap);
         primitiveTypes.forEach((type)=> primitive_.forEach((value)=> {
             const exampleMap = new Map();
-            type.toLowerCase()=== typeof value && as[`${type}s`]([value]);
-            type.toLowerCase()=== typeof value && as[`${type}s`]({prop: value});
-            type.toLowerCase()=== typeof value && as[`${type}s`](new Set([value]));
+            strict.toLowerCase()=== typeof value && as[`${type}s`]([value]);
+            strict.toLowerCase()=== typeof value && as[`${type}s`]({prop: value});
+            strict.toLowerCase()=== typeof value && as[`${type}s`](new Set([value]));
             Object.keys({prop: value}).forEach((item)=> exampleMap.set(item, exampleObject[item]));
-            type.toLowerCase()=== typeof value && as[`${type}s`](exampleMap);
+            strict.toLowerCase()=== typeof value && as[`${type}s`](exampleMap);
         }));
     });
 
@@ -207,18 +227,16 @@ describe('strict-type-checker tests', function () {
     });
 
     it('Strict positive testing', ()=> {
-        const strict = new Strict(
-            type.string`name`,
-            type.number`age`,
-            type.strings`pages`
-        );
-        strict.name = 'Mike';
-        strict.age = 12;
-        strict.pages = [''];
+        strict.string`name`.name = 'Mike';
+        strict.number`age`.age = 12;
+        strict.strings`pages`.pages = [''];
+        console.log(strict.name, strict.age, strict.pages);
+
+
         strict.bla = 1;
-        expect(strict.values()).to.deep.equal({ age: 12, name: "Mike", pages: [ '']});
-        type.string`example`;
-        strict.example = '2';
+        const { age, name, pages } = strict;
+        expect({ age, name, pages }).to.deep.equal({ age: 12, name: "Mike", pages: [ '']});
+        strict.string`example`.example = '2';
     })
 
     it('interfaces positive testing', ()=> {

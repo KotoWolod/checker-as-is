@@ -1,7 +1,11 @@
-# checker-as-is v0.8.5 RC1
+# checker-as-is v0.9 RC2
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
+
+This library respects the principle of code readability. The code should tell a story.
+
+    I.want.to.tel.you.a story(myStory;)
 
 ## The main idea is to use proxies instead of functions
 In tradition way we use functions to do the call
@@ -125,6 +129,12 @@ And, of course, the is.doctor_prescription a_string method is not implemented, b
 
 **Class checking:** 
 - [className]
+- [classInstance]
+
+    
+    is.date(Date);
+    is.date(new Date);
+    is.class(Date) or is.class(new Date)
 
 **Interface**
 ```js
@@ -138,8 +148,8 @@ const { IUser } = Interface({
 IUser.pages = as.strings;
 delete IUser.birthDate;
 
-function example(params, Interface = (as.IUser = params)) {
-            console.log(params);
+function example(name, age,  _ = as.IUser = { name, age }) {
+            console.log(name, age);
             return 'returned string';
         }
 
@@ -163,7 +173,7 @@ npm i checker-as-is -S
 <script type="module" src="https://unpkg.com/checker-as-is@latest/src/as-is.browser.min.js"></script>
 ```
 # API
-**Checker-as-is** is a stateful module. This means that the instance holds the state of the strict object, interfaces and more. Please keep this in mind.
+**Checker-as-is** is a stateful module, but all type checking with **is, as, IF, ELSE** is stateless. This means that the instance holds the state of the strict object, interfaces only. Please keep this in mind.
 ## Basics
 ```js
 is['js type here']('argument here') // true | false
@@ -172,7 +182,7 @@ as['js type here']('argument here') // argument | TypeError
 An example
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, Strict, type, as, is } = new Checker();
+const { multi, strict, as, is } = new Checker();
 
 
 //positive
@@ -181,12 +191,12 @@ as.string('example string'); // 'example string'
 
 //negative
 is.number('example string'); // false
-as.string('example string'); // TypeError: String is not a(an) number
+as.number('example string'); // TypeError: String is not a(an) number
 ```
 ## Basic Usage
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, Strict, type, as, is } = new Checker();
+const { multi, strict, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
     as.string(arg);
@@ -197,11 +207,19 @@ function example(arg, arg2, arg3) {
 };
 example(text, 2, true)
 // text, 2, true 
+
+let result, one = 1, two = 2;
+as.number(
+    result = as.number(one) + as.number(two)
+)
+console.log(result);
+// 3
+
 ```
 or next syntax
 ```js 
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, Strict, type, as, is } = new Checker();
+const { multi, strict, as, is } = new Checker();
 
 function example(arg, arg2, arg3) {
     as.string(arg), as.number(arg2), as.boolean(arg3);
@@ -214,10 +232,10 @@ example(text, 2, true)
 or more extraordinary syntax
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, Strict, type, as, is } = new Checker();
+const { multi, strict, as, is } = new Checker();
 
 function example(arg, arg2, arg3,
-                       type = [as.string(arg), as.number(arg2), as.boolean(arg3)]) {
+                       _ = [as.string(arg), as.number(arg2), as.boolean(arg3)]) {
     console.log(type);
 };
 example(text, 2, true)
@@ -227,7 +245,7 @@ example(text, 2, true)
 For more code readability:
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, Strict, type, as, is } = new Checker();
+const { multi, strict, as, is } = new Checker();
 
 is?.string('example string');
 as?.string('example string');
@@ -242,6 +260,9 @@ as.Checker(Checker);// class Checker
 
 is.Checker(instance); // true
 as.Checker(instance);// class instance
+
+is.class(instance); // true
+as.class(instance);// class instance
 
 
 ```
@@ -269,83 +290,36 @@ strict.name = 'Stephen Hawking';
 ### Basic usage
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, Strict, type, as, is } = new Checker();
-//-- Do it once!
-const strict = new Strict(
-    type.string`name`,
-    type.number`age`,
-    type.strings`pages`
-);
-//--
-strict.name = 'Mike';
-strict.age = 12;
-strict.pages = ['pageOne', 'pageTwo'];
-strict.bla = 1; // will not be assigned
-console.log(strict.name, strict.age, strict.pages);
+const { multi, strict, as, is } = new Checker();
+strict.string`name`.name = 'Mike';
+strict.number`age`;
+strict.strings`pages`;
 
-// Mike 12 [ 'pageOne', 'pageTwo' ]
+const $ = strict; // you can use alias for strict object
 
-strict.name = 2022;
+$.age = 12;
+$.pages = ['pageOne', 'pageTwo'];
+$.bla = 1; // will not be assigned
+
+let { name, age, pages } = strict; // after that name, age and pages loose their strict behavior
+
+name = 2022
+console.log(name, age, pages );
+// 2022 12 [ 'pageOne', 'pageTwo' ]
+
+$.name = 2022; // but strict.name still has it
 // TypeError: Number is not a(an) string
 ```
-Use strictObject.values() to get all values.
-```js
-const values = strict.values();
-console.log(values);
-// { name: 'Mike', age: 12, pages: [ 'pageOne', 'pageTwo' ] }
-```
-Once the strict instance has been created, you can do the following:
-```js
-type.string`example`;
-strict.example = '2';
-```
+
 **Strict has reserved variable names:** get, set, values, types, variable, lastType. This means that you can't do the following;
 ```js
 const strict = new Strict(type.null`get`);
 //or
 const strict = new Strict(type.undefined`set`);
 //or
-const strict = new Strict(type.array`values`);
-//or
 const strict = new Strict(type.object`variables`);
-
-type.string`example`;
-strict.example = '2';
-
-// when you call strict.values()
-// you only get { example: '2' }. Any of the reserved variable names will be hidden.
 ```
-Only one strict object in one file is possible, if you want to instantiate any other object, you will get a reference to the first one.
-This is because **Strict** must have access to the checker engine.
-```js
-const strict = new Strict(type.null`set`);
-type.string`example`;
 
-const secondStrict = new Strict(type.null`get`);
-secondStrict.example = '2';
-
-console.log(strict.values());
-// { example: '2' }
-```
-Any tricks will not help you get the second strict object. Maybe I'll find a solution for this because I think it's a bug, not a feature :)
-```js
-import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, Strict, type, as, is } = new Checker();
-
-type.string`example`;
-strict.example = 'first';
-
-// even second import
-import { default as CEngine } from 'checker-as-is';
-const { Strict: secondStrict } = new CEngine();
-
-const secondStrict = new SecondStrict(type.null`get`);
-secondStrict.string`example2`;
-secondStrict.example2 = 'second';
-
-secondStrict.values();
-//{ example: 'first', example2: 'second' }
-```
 ## Checking multiple types
 When a variable is part of more than one type, you can also check for that. 
 ### Basic
@@ -379,7 +353,7 @@ as[multiType]({});
 First you need create an interface, which will be stored in instance of checker in private area **#interfaces**.
 ```js
 const checker = new Checker();
-const { multi, Interface, Strict, type, as, is } = checker;
+const { multi, Interface, strict, as, is } = checker;
 
 const { [InterfaceName] } = Interface({
     [InterfaceName]: {
@@ -471,6 +445,60 @@ You can to get all interfaces from Checker instance like this:
 ```js
 const intefaces = Interface({});
 // => { IUser, IBook, IMyInterface }
+```
+## IF/ELSE/END
+These commands are an alias for the "is" command and are added to make the code easier to read.
+### Basic
+When you need to use a couple of variants of function or method calls, you can do the following
+```javascript
+// Case 1
+function someFunction(name, age, friends) {
+    console.log(name, age, friends);
+}
+// Case 2
+function someFunction(name, friends) {
+    console.log(name, friends);
+}
+// Case 3
+function someFunction(age, friends) {
+    console.log(age, friends);
+}
+// Case 4
+function someFunction(friends) {
+    console.log(friends);
+}
+
+function someFunction(name, age, friends,
+                      _= [as.stringNumberArray(name),
+                          as.undefinedNumberArray(age),
+                          as.undefinedArray(friends)
+                      ]) {
+    
+    IF.string(name) && is.number(age) && is.array(friends)? (
+        as.array(_) && as.notEmpty(_)
+    ):ELSE.string(name) && is.array(age)? (
+        friends = age,
+            age = undefined
+    ):ELSE.number(name) && is.array(age)? (
+        friends = age,
+            age = name,
+            name = undefined
+    ):ELSE.array(name)? (
+        friends = name,
+            name = undefined
+    ):END;
+    console.log(`name: ${name}, age: ${age}, friends: ${friends}`);
+}
+someFunction('Rick', 25, ['Mike', 'Liza']);
+// name: Rick, age: 25, friends: Mike,Liza
+someFunction('Rick', ['Mike', 'Liza']);
+// name: Rick, age: undefined, friends: Mike,Liza
+someFunction(25, ['Mike', 'Liza']);
+// name: undefined, age: 25, friends: Mike,Liza
+someFunction(['Mike', 'Liza']);
+// name: undefined, age: undefined, friends: Mike,Liza
+
+
 ```
 
 ## Enum type
@@ -587,7 +615,7 @@ const integrate = {
     }
 };
 
-const { multi, Strict, type, as, is } = new Checker(integrate);
+const { multi, strict, as, is } = new Checker(integrate);
 const isUrl = as;
 
 async function example(arg, arg2, arg3,
@@ -612,7 +640,7 @@ checker.errorMsg = (params)=> `${params[2] || (params[0]?.constructor
                                    :params[0])
                            } , really? I'm not sure that is a(an) ${params[1]}`;
 
-const { multi, Strict, type, as, is } = checker;
+const { multi, strict, as, is } = checker;
 checker.swap = true;
 // TypeError: Number, really? I'm not sure that is a(an) string
 ```
