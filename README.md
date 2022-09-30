@@ -187,7 +187,7 @@ npm i checker-as-is -S
 <script type="module" src="https://unpkg.com/checker-as-is@latest/src/as-is.browser.min.js"></script>
 ```
 # API
-**Checker-as-is** is a stateful module, but all type checking with **is, as, IF, ELSE** is stateless. This means that the instance holds the state of the strict object and interfaces only. Please keep this in mind.
+**Checker-as-is** is a stateful module please keep this in mind.
 ## Basics
 ```js
 is['js type here']('argument here') // true | false
