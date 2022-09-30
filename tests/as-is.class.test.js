@@ -7,7 +7,7 @@ import otherTypes from '../lib/types/otherTypes.js';
 import MyInterface from './MyInterface.interface.js';
 
 const tc = new Checker();
-const { multi, Interface, strict, as, is, IF, ELSE, END }  = tc;
+const { multi, Interface, strict, as, is, IF, ELSE, END, optional, get }  = tc;
 
 const string_ = '';
 const number_ = 2;
@@ -38,6 +38,9 @@ const typeError_ = new TypeError('this is TypeError');
 const checker_ = new Checker();
 
 const exampleObject = {};
+const generator_ = function*() { yield 0; yield 1; };
+const exampleString = 'example string';
+const segment_ = (new Intl.Segmenter('en', { granularity: 'word' })).segment(exampleString);
 new Array(10).fill(0).forEach((_, idx)=> Object.assign(exampleObject, {[`prop${idx}`]:string_}));
 const exampleArray = [...Array(10).keys(10)]
 const exampleSet = new Set(exampleArray);
@@ -51,10 +54,33 @@ const structural_ = [ array_, date_, object_, set_, map_, weakSet_, weakMap_, we
 const numerousValues_ = primitive_.concat(structural_.slice(-1));
 const numerousTypes_ = primitiveTypes.concat(structuralTypes);
 const withLengthEmpty = [string_, array_, object_, set_, map_];
+const iterable = [string_, array_, set_, map_, segment_, object_, symbol_];
 const withLengthNotEmpty = ['string_', exampleArray, exampleObject, exampleSet, exampleMap];
 
 describe('strict-type-checker tests', function () {
     this.timeout(0);
+
+    it('get.type', ()=> {
+        primitive_.forEach((type)=> console.log(get.type(type)))
+        structural_.forEach((type)=> console.log(get.type(type)))
+    });
+
+    it('optional', ()=> {
+        expect(optional.string()).to.be.undefined;
+    })
+
+    it('new Validators', ()=> {
+        is.sharedArrayBuffer(new SharedArrayBuffer(1024))
+        is.generator(generator_) && as.generator(generator_);
+        iterable.forEach((item)=> as.iterable(item));
+        is.argument(object_) && as.argument(object_);
+        is.argument(array_) && as.argument(array_);
+        is.nullish() && as.nullish();
+        is.bun() && as.bun();
+        is.node() && as.node();
+        expect(is.browser()).to.be.false;
+        expect(as.browser).to.throw();
+    })
 
     it('if/else type checking', ()=> {
         function someFunction(name, age, friends,
@@ -62,8 +88,6 @@ describe('strict-type-checker tests', function () {
                                   as.undefinedNumberArray(age),
                                   as.undefinedArray(friends)
                               ]) {
-
-
             IF.string(name) && is.number(age) && is.array(friends)? (
                 as.array(_) && as.notEmpty(_)
             ):ELSE.string(name) && is.array(age)? (
@@ -165,7 +189,6 @@ describe('strict-type-checker tests', function () {
         }));
     });
 
-
     it('any positive tests', ()=> {
         primitive_.concat(structural_).forEach((value)=> expect(is.any(value)).to.be.equal(true));
     });
@@ -194,7 +217,6 @@ describe('strict-type-checker tests', function () {
         });
 
     });
-
 
     it('Checking one repeated type string positive tests in object, array, set and map', () => {
         is.strings(exampleObject) && as.strings(exampleObject);

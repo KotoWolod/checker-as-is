@@ -1,7 +1,7 @@
 import { Checker, BaseInterface, Enum } from './index.js';
 import MyInterface from "./tests/MyInterface.interface.js";
 const tc = new Checker();
-const { multi, Interface, strict, as, is } = tc;
+const { multi, Interface, strict, as, is, IF, ELSE, END, optional, get } = tc;
 
 const string_ = '';
 const number_ = 2;
@@ -31,6 +31,9 @@ const typeError_ = new TypeError('this is TypeError');
 const checker_ = new Checker();
 
 const exampleObject = {};
+const generator_ = function*() { yield 0; yield 1; };
+const exampleString = 'example string';
+const segment_ = (new Intl.Segmenter('en', { granularity: 'word' })).segment(exampleString);
 new Array(10).fill(0).forEach((_, idx)=> Object.assign(exampleObject, {[`prop${idx}`]:string_}));
 const exampleArray = [...Array(10).keys(10)]
 const exampleSet = new Set(exampleArray);
@@ -38,10 +41,13 @@ const exampleMap = new Map();
 Object.keys(exampleObject).forEach((item)=> exampleMap.set(item, exampleObject[item]));
 
 const typeof_ = [string_, number_, boolean_, symbol_, function_, bigInt_];
+const primitive_ = [string_, number_, boolean_, symbol_, function_, bigInt_];
 const structural_ = [ array_, date_, object_, set_, map_, weakSet_, weakMap_, weakRef_,
     regExp_, promise_, json_, json5_, error_, rangeError_, referenceError_, syntaxError_, typeError_,
     checker_];
 const numerous_ = typeof_.concat(structural_.slice(-1));
+const iterable = [string_, array_, set_, map_, segment_, object_, symbol_];
+
 
 is.string(string_) && as.string(string_);
 is.String(string_) && as.String(string_);
@@ -159,6 +165,43 @@ const enumExample = Enum.init({
     Sunday: 'super day off'
 });
 as.Enum(enumExample) && as.Enum(enumExample);
+function someFunction(name, age, friends,
+                      _= [as.stringNumberArray(name),
+                          as.undefinedNumberArray(age),
+                          as.undefinedArray(friends)
+                      ]) {
+    IF.string(name) && is.number(age) && is.array(friends)? (
+        as.array(_) && as.notEmpty(_)
+    ):ELSE.string(name) && is.array(age)? (
+        friends = age,
+            age = undefined
+    ):ELSE.number(name) && is.array(age)? (
+        friends = age,
+            age = name,
+            name = undefined
+    ):ELSE.array(name)? (
+        friends = name,
+            name = undefined
+    ):END;
+    console.log(`name: ${name}, age: ${age}, friends: ${friends}`);
+}
+someFunction('Rick', 25, ['Mike', 'Liza']);
+someFunction('Rick',['Mike', 'Liza']);
+someFunction(25, ['Mike', 'Liza']);
+someFunction(['Mike', 'Liza']);
+
+is.generator(generator_) && as.generator(generator_);
+iterable.forEach((item)=> as.iterable(item));
+is.argument(object_) && as.argument(object_);
+is.argument(array_) && as.argument(array_);
+is.nullish() && as.nullish();
+is.browser() && as.browser();
+
+optional.string();
+
+// primitive_.forEach((type)=> console.log(get.type(type))); probably bug
+// structural_.forEach((type)=> console.log(get.type(type))); probably bug
+
 window.document.body.innerHTML=`
 <div style="text-align: left; padding-left: 20%"> <h2>Syntax</h2>
 is.string(string_) && as.string(string_);<br>
@@ -281,3 +324,5 @@ as.Enum(enumExample) && as.Enum(enumExample);<br>
 <h3>works!</h3> </div>
 <h2 style="text-align: center"> All tests completed</h2>
 `;
+window.is = is;
+window.as = as;

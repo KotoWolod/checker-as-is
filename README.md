@@ -1,11 +1,11 @@
-# checker-as-is v0.9 RC2
+# checker-as-is v0.9.2 RC2
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
 
 This library respects the principle of code readability. The code should tell a story.
 
-    I.want.to.tel.you.a.story(myStory)
+    I.want.to.tell.you.a.story(myStory)
 
 ## The main idea is to use proxies instead of functions
 In traditional way we use functions to do the call
@@ -52,7 +52,7 @@ function as(type, value) {
 // and after that to use it like a function call
 is('number', 33) // instead of is.number(33)
 ```
-So, if the property name in the is/as calsl is a string variable, you can do cool things. If you implement two methods for checking strings and numbers as an example, you can do it like this.
+So, if the property name in the is/as calls is a string variable, you can do cool things. If you implement two methods for checking strings and numbers as an example, you can do it like this.
 ```javascript
 is.string_or_number(variable);
 // inside the "is" method
@@ -84,13 +84,18 @@ And, of course, the is.doctor_prescription a_string method is not implemented, b
 - Function | function
 - BigInt | bigInt | bigint
 - Array | array
+- **TypedArray | typedArray | Typedarray | typedarray**
+- **Buffer | buffer**
+- **SharedArrayBuffer | sharedArrayBuffer | SharedarrayBuffer | sharedsrrayBuffer | sharedsrraybuffer**
 - Date | date
 - Object | date
-- **Class | class**
-- **instance**
-- **Enum | enum**
+- Class | class
+- instance
+- Enum | enum
 - Set | set
 - Map | map
+- **Iterator | iterator**
+- **Nullish | nullish**
 - WeakSet | weakSet | weeakset
 - WeakMap | wearMap | weakmap 
 - WeakRef | weakRef | weakref
@@ -118,15 +123,19 @@ And, of course, the is.doctor_prescription a_string method is not implemented, b
 
 **Strict type object:**
     
-     stric.string`name`
+     strict.string`name`
      strict.name = 'string'
     // or
-    stric.string`name`.name = 'string'
+    strict.string`name`.name = 'string'
 **Validators list:** 
 - NotEmpty | notEmpty
 - Empty | empty
 - JSON | Json | json
 - JSON5 | Json5 | json
+- **NodeJS | Node | nodejs | node | Bun | bun**
+- **Browser | browser| Chrome | chrome | Safari | safari | Firefox | firefox | Opera | opera | Edg | edg | Samsung | samsung**
+- **Argument | argument**
+- **Generator | generator**
 
 **Class checking:** 
 - [className]
@@ -163,6 +172,11 @@ as.StringNumber(example({ name: 'text', age: 12, pages:['page'] }));
     is.email('foo@bar.com'); // true | false
     as.email('foo@bar.com'); // foo@bar.com | TypeError
 
+**Utility**
+
+    get.type(Promise); // Promise
+    get.type(43); // Number
+
 ## Install
 **Node.js**
 ```sh
@@ -178,25 +192,29 @@ npm i checker-as-is -S
 ```js
 is['js type here']('argument here') // true | false
 as['js type here']('argument here') // argument | TypeError
+optional['js type here' + 'Undefined' + 'Null']('argument here') // argument | TypeError
 ```
 An example
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, strict, as, is } = new Checker();
+const { multi, strict, as, is, optional } = new Checker();
 
 
 //positive
 is.string('example string'); // true
-as.string('example string'); // 'example string'
+as.string('example string'); // example string
+optional.string() // undefined
+optional.string('example string') // example string
 
 //negative
 is.number('example string'); // false
 as.number('example string'); // TypeError: String is not a(an) number
+optional.number('example string'); // TypeError: String is not a(an) number
 ```
 ## Basic Usage
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, strict, as, is } = new Checker();
+const { multi, strict, as, is, optional }  = new Checker();
 
 function example(arg, arg2, arg3) {
     as.string(arg);
@@ -219,7 +237,7 @@ console.log(result);
 or next syntax
 ```js 
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, strict, as, is } = new Checker();
+const { multi, strict, as, is, optional }  = new Checker();
 
 function example(arg, arg2, arg3) {
     as.string(arg), as.number(arg2), as.boolean(arg3);
@@ -232,7 +250,7 @@ example(text, 2, true)
 or more extraordinary syntax
 ```js
 import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, strict, as, is } = new Checker();
+const { multi, strict, as, is, optional }  = new Checker();
 
 function example(arg, arg2, arg3,
                        _ = [as.string(arg), as.number(arg2), as.boolean(arg3)]) {
@@ -241,14 +259,6 @@ function example(arg, arg2, arg3,
 example(text, 2, true)
 //[ text, 2, true ]
 
-```
-For more code readability:
-```js
-import { Checker, BaseInterface, Enum, JSON5 } from 'checker-as-is';
-const { multi, strict, as, is } = new Checker();
-
-is?.string('example string');
-as?.string('example string');
 ```
 ### You can even check the class type
 ```js
@@ -274,6 +284,7 @@ is.strings(exampleObject) && as.strings(exampleObject);
 is.Numbers(exampleArray) && as.Numbers(exampleArray);
 is.Errors(exampleSet) && as.Errors(exampleSet);
 is.BigInts(exampleMap) && as.BigInts(exampleMap); 
+is.BigInts(exampleMap) && optional.BigInts(exampleMap); 
 ```
 ## Strict typing
 ### Basics
@@ -496,6 +507,45 @@ someFunction(['Mike', 'Liza']);
 // name: undefined, age: undefined, friends: Mike,Liza
 
 
+```
+## Utility
+A simple method to get type of argument
+```javascript
+get.type('any argument here'); // type of argument
+
+get.type(43); // Number
+get.type(Checker); // Checker
+```
+
+## Aliases
+You can check the following types by "is", "as" or javascript, but this looks more readable
+```javascript
+is.arguments(1); // true | false
+as.arguments(1) // 1 | TypeError
+// the same of
+is.arrayObject(1); // true
+
+is.generator(function*() { yield 0 }) // true | false
+as.generator(function*() { yield 0 }) // function*() { yield 0 } | TypeError
+// the same of
+is.iterator(function*() { yield 0 })  // true | false
+as.iterator(function*() { yield 0 })  // function*() { yield 0 } | TypeError
+
+is.NodeJs() // true | false
+as.NodeJs() //  process | TypeError
+// the same of
+process !== undefined // true
+
+is.browser() // true
+ss.browser() // navigator | TypeError
+// the same of
+navigator !== undefined  // true
+    
+is.Chrome() // true
+as.Chrome() // navigator | TypeError
+// the same of
+navigator.userAgent.includes('Chrome') // true    
+    
 ```
 
 ## Enum type
