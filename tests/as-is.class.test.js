@@ -60,6 +60,10 @@ const withLengthNotEmpty = ['string_', exampleArray, exampleObject, exampleSet, 
 describe('strict-type-checker tests', function () {
     this.timeout(0);
 
+    it('delme', ()=> {
+        expect(is).to.be.an('object');
+    })
+
     it('get.type', ()=> {
         primitive_.forEach((type)=> console.log(get.type(type)))
         structural_.forEach((type)=> console.log(get.type(type)))
@@ -101,7 +105,7 @@ describe('strict-type-checker tests', function () {
                 friends = name,
                 name = undefined
             ):END;
-            console.log(`name: ${name}, age: ${age}, friends: ${friends}`);
+            return [`name: ${name}, age: ${age}, friends: ${friends}`];
         }
         someFunction('Rick', 25, ['Mike', 'Liza']);
         someFunction('Rick',['Mike', 'Liza']);

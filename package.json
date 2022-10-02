@@ -1,6 +1,6 @@
 {
   "name": "checker-as-is",
-  "version": "0.9.21",
+  "version": "0.9.3(work in progress)",
   "description": "Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object and more.",
   "main": "index.js",
   "type": "module",
@@ -12,7 +12,9 @@
     "tests": "tests"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha tests/as-is.class.test.js"
+    "test": "node tests/pro-code.test.js",
+    "test:mocha": "./node_modules/.bin/mocha tests/as-is.class.test.js",
+    "test:browser": "npx browser-sync --start"
   },
   "keywords": [
     "as-is",
@@ -73,12 +75,11 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "4.3.4",
-    "chai-bytes": "0.1.2",
     "mocha": "9.1.3"
   },
   "files": [
     "*.js",
-    "browserTest.html",
+    "index.html",
     "/lib/*.js",
     "/tests/*.js",
     "/vendor/*.js",
@@ -94,6 +95,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KotoWolod/checker-as-is"
-  },
-  "dependencies": {}
+  }
 }

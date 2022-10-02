@@ -679,7 +679,7 @@ await isUrl?.up('https://not-google.com');
 ```
 ## Settings
 To change error message you can reload Checker.errorMsg.
-If you want to swap "is" on "as". In standard behaviour 'is' returns boolean and "as" throws TypeErrors. If you set Checker.swap to true, now 'as' will returns boolean and 'is' will throws TypeErrors. It's cool when you want to disable throwing errors by "as" and don't use "is" for logic.
+If you want to disable throwing error please set checker.disabled = true.
 ```js
 const checker = new Checker(integrate);
 checker.errorMsg = (params)=> `${params[2] || (params[0]?.constructor 
@@ -688,7 +688,7 @@ checker.errorMsg = (params)=> `${params[2] || (params[0]?.constructor
                            } , really? I'm not sure that is a(an) ${params[1]}`;
 
 const { multi, strict, as, is } = checker;
-checker.swap = true;
+checker.disabled = true;
 // TypeError: Number, really? I'm not sure that is a(an) string
 ```
 #

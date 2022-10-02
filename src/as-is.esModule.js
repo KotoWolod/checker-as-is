@@ -493,7 +493,7 @@ class MicroTest {
     START = new Proxy(this, {
         get(target, name) {
             target.info.time(name);
-            target.info.info(`${name} ->`)
+            target.info.log(`${name} ->`)
         }
     });
 
@@ -507,7 +507,7 @@ class MicroTest {
         get(target, name) {
             target.info.timeEnd(name);
             if(target.filedTest) {
-                console.error(`\u2717 failed tests ${target.filedTest} \u2717`);
+                console.error('\x1B[31m', `\u2717 failed tests ${target.filedTest} \u2717\x1b[0m`);
                 throw (new Error(`failed tests ${target.filedTest}`)).message;
             }
         }
@@ -564,7 +564,7 @@ class MicroTest {
         get(target, name) {
             target.filedTest++;
             const { stack } = new Error();
-            return (arg)=> target.info.error( `\u2717 ${name}.${arg} ->${stack.split('at')[3].replace('\n','')}`);
+            return (arg)=> target.info.log('\x1B[31m', `\u2717 ${name}.${arg} ->${stack.split('at')[3].replace('\n','')}\x1b[0m`);
         }
     });
 
@@ -574,9 +574,9 @@ class MicroTest {
         this.is = is;
         this.as = as;
         is.boolean(silentMode) && silentMode
-            ? this.info = { log: ()=> {}, time: ()=> {}, timeEnd:()=> {}, error:()=> {}}
+            ? this.info = { log: ()=> {}, time: ()=> {}, timeEnd:()=> {}}
             : this.info = console;
     }
 }
 
-Object.assign(window, { Checker, BaseInterface, Enum, JSON5, MicroTest, primitiveTypes, structuralTypes, otherTypes, aliasTypes });
+export { Checker, BaseInterface, Enum, JSON5, MicroTest, primitiveTypes, structuralTypes, otherTypes, aliasTypes };

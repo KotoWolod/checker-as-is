@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Micro tests</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Ubuntu Mono', monospace;
+            font-size: larger;
+            background-color: #202124;
+            padding: 120px;
+        };
+    </style>
+</head>
+<body>
+<div id="log">
+    <h2 style="color: dodgerblue;font-weight: bold">Micro tests console output</h2>
+</div>
+</body>
+<script>
+    (function () {
+        var logger = document.getElementById('log');
+        console.info = (message)=> logger.innerHTML += `<h3 style="color: dodgerblue;font-weight: bold">${message} </h3>`;
+        console.log = (message)=> logger.innerHTML += `<div style="color:seagreen">${message} </div>`;
+        console.error = (message)=> logger.innerHTML += `<div style="color:crimson; font-weight: bold">${message} </div>`;
+    })();
+</script>
+<script type="module" src="./src/as-is.browser.js"></script>
+<script type="module" src="./tests/pro-code.test.js"></script>
+</html>
