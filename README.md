@@ -1,4 +1,5 @@
-# No longer supported, use https://www.npmjs.com/package/@pro-script/as-is instead
+# No longer supported.
+## use https://www.npmjs.com/package/@pro-script/as-is instead
 
 ## checker-as-is v0.9.32 (No longer supported)
 
