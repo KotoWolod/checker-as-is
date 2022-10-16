@@ -1,6 +1,6 @@
 # No longer supported, use https://www.npmjs.com/package/@pro-script/as-is instead
 
-## checker-as-is v0.9.2
+## checker-as-is v0.9.32 (No longer supported)
 
 Check your types at runtime with ESNext syntax by meta programing in node.js and browser with interfaces, strict object, enum type and more.
 Follow me on twitter for further updates [twitter](https://twitter.com/VolodymyrKotov)
